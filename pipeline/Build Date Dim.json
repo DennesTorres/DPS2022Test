@@ -131,7 +131,7 @@
 				"typeProperties": {
 					"variableName": "startDate",
 					"value": {
-						"value": "@activity('Query Date Dim').output.StartDate",
+						"value": "@activity('Query Date Dim').output.outputParameters.StartDate",
 						"type": "Expression"
 					}
 				}
@@ -151,7 +151,7 @@
 				"typeProperties": {
 					"variableName": "endDate",
 					"value": {
-						"value": "@activity('Query Date Dim').output.EndDate",
+						"value": "@activity('Query Date Dim').output.outputParameters.EndDate",
 						"type": "Expression"
 					}
 				}
