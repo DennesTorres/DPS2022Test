@@ -169,7 +169,11 @@
 				],
 				"userProperties": [],
 				"typeProperties": {
-					"variableName": ""
+					"variableName": "RealStartDate",
+					"value": {
+						"value": "@adddays(activity('Query Fact Dim').output.outputParameters.ProdStartDate,-1000)\n",
+						"type": "Expression"
+					}
 				}
 			},
 			{
@@ -185,7 +189,63 @@
 				],
 				"userProperties": [],
 				"typeProperties": {
-					"variableName": ""
+					"variableName": "RealEndDate",
+					"value": {
+						"value": "@adddays(activity('Query Fact Dim').output.outputParameters.ProdEndDate,1000)\n\n",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "Set Final Start date",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "SetStartDate",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "SetRealStartDate",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "FinalStartDate",
+					"value": {
+						"value": "@if(equals(variables('startDate'),''),variables('RealStartDate'),if(less(variables('RealStartDate'),variables('startDate')) ,variables('RealStartDate'),variables('startDate') ))",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "Set Final End Date",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "SetEndDate",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "SetRealEndDate",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "FinalEndDate",
+					"value": {
+						"value": "@if(equals(variables('endDate'),''),variables('RealEndDate'),if(greater(variables('RealEndDate'),variables('endDate')) ,variables('RealEndDate'),variables('endDate') ))\n",
+						"type": "Expression"
+					}
 				}
 			}
 		],
