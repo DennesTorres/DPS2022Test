@@ -134,11 +134,8 @@
 					},
 					"waitOnCompletion": true,
 					"parameters": {
-						"SourceStore_Location": {
-							"value": "@pipeline().globalParameters.storagelink",
-							"type": "Expression"
-						},
-						"SourceStore_Directory": "bronze/productCategory"
+						"SourceStore_Location": "bronze",
+						"SourceStore_Directory": "productCategory"
 					}
 				}
 			}
