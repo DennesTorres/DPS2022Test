@@ -13,6 +13,10 @@
 			"sqlusername": {
 				"type": "string",
 				"value": "dennes"
+			},
+			"passwordkey": {
+				"type": "string",
+				"value": "devpassword"
 			}
 		}
 	},
