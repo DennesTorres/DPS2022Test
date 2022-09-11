@@ -96,6 +96,10 @@
 										"filename": {
 											"value": "@item().name",
 											"type": "Expression"
+										},
+										"storagelink": {
+											"value": "@pipeline().globalParameters.storagelink",
+											"type": "Expression"
 										}
 									}
 								},
