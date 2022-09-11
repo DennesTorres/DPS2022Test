@@ -105,7 +105,13 @@
 				"outputs": [
 					{
 						"referenceName": "categoryParquet",
-						"type": "DatasetReference"
+						"type": "DatasetReference",
+						"parameters": {
+							"storagelink": {
+								"value": "@pipeline().globalParameters.storagelink",
+								"type": "Expression"
+							}
+						}
 					}
 				]
 			}
