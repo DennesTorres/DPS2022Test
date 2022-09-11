@@ -1,15 +1,15 @@
 {
 	"name": "linkedStorage",
 	"properties": {
-		"annotations": [],
-		"type": "AzureBlobFS",
-		"typeProperties": {
-			"url": "https://dps2022stagingdev.dfs.core.windows.net/"
-		},
 		"parameters": {
 			"storagelink": {
 				"type": "string"
 			}
+		},
+		"annotations": [],
+		"type": "AzureBlobFS",
+		"typeProperties": {
+			"url": "@{linkedService().storagelink}"
 		},
 		"connectVia": {
 			"referenceName": "AutoResolveIntegrationRuntime",
