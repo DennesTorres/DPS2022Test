@@ -1,0 +1,99 @@
+{
+	"name": "pipeline1",
+	"properties": {
+		"activities": [
+			{
+				"name": "Analyse Start",
+				"type": "IfCondition",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"expression": {
+						"value": "@not(equals(pipeline().parameters.StartDate,pipeline().parameters.FinalStartDate))",
+						"type": "Expression"
+					},
+					"ifTrueActivities": [
+						{
+							"name": "Define end date",
+							"type": "SetVariable",
+							"dependsOn": [],
+							"userProperties": [],
+							"typeProperties": {
+								"variableName": "ExecEndDate",
+								"value": {
+									"value": "@adddays(pipeline().parameters.StartDate,-1)",
+									"type": "Expression"
+								}
+							}
+						},
+						{
+							"name": "Build Start Dimension",
+							"type": "SqlServerStoredProcedure",
+							"dependsOn": [
+								{
+									"activity": "Define end date",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"policy": {
+								"timeout": "0.12:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"linkedServiceName": {
+								"referenceName": "LinkedSQL",
+								"type": "LinkedServiceReference",
+								"parameters": {
+									"servername": {
+										"value": "@pipeline().globalParameters.sqlservername",
+										"type": "Expression"
+									},
+									"databasename": {
+										"value": "@pipeline().globalParameters.databasename",
+										"type": "Expression"
+									},
+									"username": {
+										"value": "@pipeline().globalParameters.sqlusername",
+										"type": "Expression"
+									},
+									"secretname": {
+										"value": "@pipeline().globalParameters.passwordkey",
+										"type": "Expression"
+									}
+								}
+							}
+						}
+					]
+				}
+			}
+		],
+		"parameters": {
+			"FinalStartDate": {
+				"type": "string"
+			},
+			"FinalEndDate": {
+				"type": "string"
+			},
+			"StartDate": {
+				"type": "string"
+			},
+			"EndDate": {
+				"type": "string"
+			}
+		},
+		"variables": {
+			"ExecEndDate": {
+				"type": "String"
+			},
+			"ExecStartDate": {
+				"type": "String"
+			}
+		},
+		"annotations": []
+	}
+}
