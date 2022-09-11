@@ -12,6 +12,9 @@
 			},
 			"Directory": {
 				"type": "String"
+			},
+			"storagelink": {
+				"type": "string"
 			}
 		},
 		"annotations": [],
