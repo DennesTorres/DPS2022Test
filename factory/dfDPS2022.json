@@ -21,6 +21,10 @@
 			"storagelink": {
 				"type": "string",
 				"value": " https://dps2022staginguat.dfs.core.windows.net/"
+			},
+			"dwdatabasename": {
+				"type": "string",
+				"value": "advdwuat"
 			}
 		}
 	},
