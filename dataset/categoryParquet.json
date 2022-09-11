@@ -5,6 +5,11 @@
 			"referenceName": "linkedStorage",
 			"type": "LinkedServiceReference"
 		},
+		"parameters": {
+			"storagelink": {
+				"type": "string"
+			}
+		},
 		"annotations": [],
 		"type": "Parquet",
 		"typeProperties": {
