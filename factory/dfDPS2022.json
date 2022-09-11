@@ -4,7 +4,7 @@
 		"globalParameters": {
 			"sqlservername": {
 				"type": "string",
-				"value": "mmdpug.database.windows.net"
+				"value": "dps2022sql.database.windows.net"
 			},
 			"databasename": {
 				"type": "string",
