@@ -4,7 +4,13 @@
 		"description": "It describes the folder in the data source store.",
 		"linkedServiceName": {
 			"referenceName": "linkedStorage",
-			"type": "LinkedServiceReference"
+			"type": "LinkedServiceReference",
+			"parameters": {
+				"storagelink": {
+					"value": "@dataset().storagelink",
+					"type": "Expression"
+				}
+			}
 		},
 		"parameters": {
 			"Container": {
