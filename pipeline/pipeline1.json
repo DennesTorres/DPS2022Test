@@ -115,8 +115,98 @@
 						}
 					]
 				}
+			},
+			{
+				"name": "SetStartDate",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "Query Date Dim",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": ""
+				}
+			},
+			{
+				"name": "SetEndDate",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "Query Date Dim",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": ""
+				}
+			},
+			{
+				"name": "SetRealStartDate",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "Query Fact Dim",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": ""
+				}
+			},
+			{
+				"name": "SetRealEndDate",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "Query Fact Dim",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": ""
+				}
 			}
 		],
+		"variables": {
+			"startDate": {
+				"type": "String"
+			},
+			"endDate": {
+				"type": "String"
+			},
+			"RealStartDate": {
+				"type": "String"
+			},
+			"RealEndDate": {
+				"type": "String"
+			},
+			"FinalStartDate": {
+				"type": "String"
+			},
+			"FinalEndDate": {
+				"type": "String"
+			},
+			"ExecEndDate": {
+				"type": "String"
+			},
+			"ExecStartDate": {
+				"type": "String"
+			}
+		},
 		"annotations": []
 	}
 }
