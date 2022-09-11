@@ -271,6 +271,39 @@
 						"value": "@equals(variables('startDate'),'')",
 						"type": "Expression"
 					},
+					"ifFalseActivities": [
+						{
+							"name": "Complete Date Dimension",
+							"type": "ExecutePipeline",
+							"dependsOn": [],
+							"userProperties": [],
+							"typeProperties": {
+								"pipeline": {
+									"referenceName": "Import Date Dim",
+									"type": "PipelineReference"
+								},
+								"waitOnCompletion": true,
+								"parameters": {
+									"FinalStartDate": {
+										"value": "@variables('FinalStartDate')",
+										"type": "Expression"
+									},
+									"FinalEndDate": {
+										"value": "@variables('FinalEndDate')",
+										"type": "Expression"
+									},
+									"StartDate": {
+										"value": "@variables('startDate')",
+										"type": "Expression"
+									},
+									"EndDate": {
+										"value": "@variables('endDate')",
+										"type": "Expression"
+									}
+								}
+							}
+						}
+					],
 					"ifTrueActivities": [
 						{
 							"name": "Build entire date dim",
