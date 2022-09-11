@@ -247,6 +247,87 @@
 						"type": "Expression"
 					}
 				}
+			},
+			{
+				"name": "Is Starting",
+				"type": "IfCondition",
+				"dependsOn": [
+					{
+						"activity": "Set Final Start date",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "Set Final End Date",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"expression": {
+						"value": "@equals(variables('startDate'),'')",
+						"type": "Expression"
+					},
+					"ifTrueActivities": [
+						{
+							"name": "Build entire date dim",
+							"type": "SqlServerStoredProcedure",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "0.12:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"storedProcedureName": "[dbo].[FillDateDim]",
+								"storedProcedureParameters": {
+									"EndDate": {
+										"value": {
+											"value": "@variables('FinalEndDate')",
+											"type": "Expression"
+										},
+										"type": "DateTime"
+									},
+									"StartDate": {
+										"value": {
+											"value": "@variables('FinalStartDate')",
+											"type": "Expression"
+										},
+										"type": "DateTime"
+									}
+								}
+							},
+							"linkedServiceName": {
+								"referenceName": "LinkedSQL",
+								"type": "LinkedServiceReference",
+								"parameters": {
+									"servername": {
+										"value": "@pipeline().globalParameters.sqlservername",
+										"type": "Expression"
+									},
+									"databasename": {
+										"value": "@pipeline().globalParameters.dwdatabasename",
+										"type": "Expression"
+									},
+									"username": {
+										"value": "@pipeline().globalParameters.sqlusername",
+										"type": "Expression"
+									},
+									"secretname": {
+										"value": "@pipeline().globalParameters.passwordkey",
+										"type": "Expression"
+									}
+								}
+							}
+						}
+					]
+				}
 			}
 		],
 		"variables": {
