@@ -129,7 +129,11 @@
 				],
 				"userProperties": [],
 				"typeProperties": {
-					"variableName": ""
+					"variableName": "startDate",
+					"value": {
+						"value": "@activity('Query Date Dim').output.StartDate",
+						"type": "Expression"
+					}
 				}
 			},
 			{
@@ -145,7 +149,11 @@
 				],
 				"userProperties": [],
 				"typeProperties": {
-					"variableName": ""
+					"variableName": "endDate",
+					"value": {
+						"value": "@activity('Query Date Dim').output.EndDate",
+						"type": "Expression"
+					}
 				}
 			},
 			{
