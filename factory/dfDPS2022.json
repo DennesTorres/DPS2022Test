@@ -20,7 +20,7 @@
 			},
 			"storagelink": {
 				"type": "string",
-				"value": "https://dps2022stagingdev.dfs.core.windows.net/"
+				"value": " https://dps2022staginguat.dfs.core.windows.net/"
 			}
 		}
 	},
