@@ -17,6 +17,10 @@
 			"passwordkey": {
 				"type": "string",
 				"value": "devpassword"
+			},
+			"storagelink": {
+				"type": "string",
+				"value": "https://dps2022stagingdev.dfs.core.windows.net/"
 			}
 		}
 	},
