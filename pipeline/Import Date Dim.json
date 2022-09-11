@@ -46,7 +46,23 @@
 							},
 							"userProperties": [],
 							"typeProperties": {
-								"storedProcedureName": "[dbo].[FillDateDim]"
+								"storedProcedureName": "[dbo].[FillDateDim]",
+								"storedProcedureParameters": {
+									"EndDate": {
+										"value": {
+											"value": "@variables('ExecEndDate')",
+											"type": "Expression"
+										},
+										"type": "DateTime"
+									},
+									"StartDate": {
+										"value": {
+											"value": "@pipeline().parameters.FinalStartDate",
+											"type": "Expression"
+										},
+										"type": "DateTime"
+									}
+								}
 							},
 							"linkedServiceName": {
 								"referenceName": "LinkedSQL",
