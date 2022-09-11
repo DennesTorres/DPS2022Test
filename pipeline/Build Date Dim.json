@@ -80,7 +80,7 @@
 							"type": "Expression"
 						},
 						"databasename": {
-							"value": "@pipeline().globalParameters.dwdatabasename",
+							"value": "@pipeline().globalParameters.databasename",
 							"type": "Expression"
 						},
 						"username": {
