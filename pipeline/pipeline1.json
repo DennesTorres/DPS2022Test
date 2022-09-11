@@ -1,0 +1,122 @@
+{
+	"name": "pipeline1",
+	"properties": {
+		"activities": [
+			{
+				"name": "Query Date Dim",
+				"type": "Script",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"linkedServiceName": {
+					"referenceName": "LinkedSQL",
+					"type": "LinkedServiceReference",
+					"parameters": {
+						"servername": {
+							"value": "@pipeline().globalParameters.sqlservername",
+							"type": "Expression"
+						},
+						"databasename": {
+							"value": "@pipeline().globalParameters.dwdatabasename",
+							"type": "Expression"
+						},
+						"username": {
+							"value": "@pipeline().globalParameters.sqlusername",
+							"type": "Expression"
+						},
+						"secretname": {
+							"value": "@pipeline().globalParameters.passwordkey",
+							"type": "Expression"
+						}
+					}
+				},
+				"typeProperties": {
+					"scripts": [
+						{
+							"parameters": [
+								{
+									"name": "StartDate",
+									"type": "Datetime",
+									"value": null,
+									"direction": "Output"
+								},
+								{
+									"name": "EndDate",
+									"type": "Datetime",
+									"value": null,
+									"direction": "Output"
+								}
+							],
+							"type": "Query",
+							"text": "select @StartDate=min([date]),@EndDate=max([date]) from dim.Date"
+						}
+					]
+				}
+			},
+			{
+				"name": "Query Fact Dim",
+				"type": "Script",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"linkedServiceName": {
+					"referenceName": "LinkedSQL",
+					"type": "LinkedServiceReference",
+					"parameters": {
+						"servername": {
+							"value": "@pipeline().globalParameters.sqlservername",
+							"type": "Expression"
+						},
+						"databasename": {
+							"value": "@pipeline().globalParameters.dwdatabasename",
+							"type": "Expression"
+						},
+						"username": {
+							"value": "@pipeline().globalParameters.sqlusername",
+							"type": "Expression"
+						},
+						"secretname": {
+							"value": "@pipeline().globalParameters.passwordkey",
+							"type": "Expression"
+						}
+					}
+				},
+				"typeProperties": {
+					"scripts": [
+						{
+							"parameters": [
+								{
+									"name": "ProdStartDate",
+									"type": "Datetime",
+									"value": null,
+									"direction": "Output"
+								},
+								{
+									"name": "ProdEndDate",
+									"type": "Datetimeoffset",
+									"value": null,
+									"direction": "Output"
+								}
+							],
+							"type": "Query",
+							"text": "select @ProdStartDate=min([TransactionDate]),@ProdEndDate=max([TransactionDate])\nfrom [dbo].[bigTransactionHistory]"
+						}
+					]
+				}
+			}
+		],
+		"annotations": []
+	}
+}
