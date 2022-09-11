@@ -135,7 +135,7 @@
 					"waitOnCompletion": true,
 					"parameters": {
 						"SourceStore_Location": "bronze",
-						"SourceStore_Directory": "productCategory"
+						"SourceStore_Directory": "productcategory"
 					}
 				}
 			}
