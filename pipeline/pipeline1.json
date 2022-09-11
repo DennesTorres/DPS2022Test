@@ -70,6 +70,75 @@
 						}
 					]
 				}
+			},
+			{
+				"name": "Analyse End Date",
+				"type": "IfCondition",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"expression": {
+						"value": "@not(equals(pipeline().parameters.FinalEndDate,pipeline().parameters.EndDate))",
+						"type": "Expression"
+					},
+					"ifTrueActivities": [
+						{
+							"name": "Define Start Date",
+							"type": "SetVariable",
+							"dependsOn": [],
+							"userProperties": [],
+							"typeProperties": {
+								"variableName": "ExecStartDate",
+								"value": {
+									"value": "@adddays(pipeline().parameters.EndDate,1)",
+									"type": "Expression"
+								}
+							}
+						},
+						{
+							"name": "Build end date dimension",
+							"type": "SqlServerStoredProcedure",
+							"dependsOn": [
+								{
+									"activity": "Define Start Date",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"policy": {
+								"timeout": "0.12:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"linkedServiceName": {
+								"referenceName": "LinkedSQL",
+								"type": "LinkedServiceReference",
+								"parameters": {
+									"servername": {
+										"value": "@pipeline().globalParameters.sqlservername",
+										"type": "Expression"
+									},
+									"databasename": {
+										"value": "@pipeline().globalParameters.databasename",
+										"type": "Expression"
+									},
+									"username": {
+										"value": "@pipeline().globalParameters.sqlusername",
+										"type": "Expression"
+									},
+									"secretname": {
+										"value": "@pipeline().globalParameters.passwordkey",
+										"type": "Expression"
+									}
+								}
+							}
+						}
+					]
+				}
 			}
 		],
 		"parameters": {
