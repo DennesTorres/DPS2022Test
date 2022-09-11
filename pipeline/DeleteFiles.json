@@ -136,12 +136,6 @@
 			},
 			"SourceStore_Directory": {
 				"type": "String"
-			},
-			"DestinationStore_Location": {
-				"type": "String"
-			},
-			"DestinationStore_Directory": {
-				"type": "String"
 			}
 		},
 		"annotations": []
