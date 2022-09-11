@@ -1,0 +1,145 @@
+{
+	"name": "CategoryImport",
+	"properties": {
+		"activities": [
+			{
+				"name": "Copy Product Category",
+				"type": "Copy",
+				"dependsOn": [
+					{
+						"activity": "DeleteFiles",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"queryTimeout": "02:00:00",
+						"isolationLevel": "ReadCommitted",
+						"partitionOption": "None"
+					},
+					"sink": {
+						"type": "ParquetSink",
+						"storeSettings": {
+							"type": "AzureBlobFSWriteSettings"
+						},
+						"formatSettings": {
+							"type": "ParquetWriteSettings"
+						}
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "ProductCategoryID",
+									"type": "Int32",
+									"physicalType": "int"
+								},
+								"sink": {
+									"name": "ProductCategoryID",
+									"type": "Int32",
+									"physicalType": "INT_32"
+								}
+							},
+							{
+								"source": {
+									"name": "ParentProductCategoryID",
+									"type": "Int32",
+									"physicalType": "int"
+								},
+								"sink": {
+									"name": "ParentProductCategoryID",
+									"type": "Int32",
+									"physicalType": "INT_32"
+								}
+							},
+							{
+								"source": {
+									"name": "Name",
+									"type": "String",
+									"physicalType": "nvarchar"
+								},
+								"sink": {
+									"name": "Name",
+									"type": "String",
+									"physicalType": "UTF8"
+								}
+							}
+						],
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "CategoryDS",
+						"type": "DatasetReference",
+						"parameters": {
+							"servername": {
+								"value": "@pipeline().globalParameters.sqlservername",
+								"type": "Expression"
+							},
+							"databasename": {
+								"value": "@pipeline().globalParameters.databasename",
+								"type": "Expression"
+							},
+							"username": {
+								"value": "@pipeline().globalParameters.sqlusername",
+								"type": "Expression"
+							},
+							"secretname": {
+								"value": "@pipeline().globalParameters.passwordkey",
+								"type": "Expression"
+							}
+						}
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "categoryParquet",
+						"type": "DatasetReference",
+						"parameters": {
+							"storagelink": {
+								"value": "@pipeline().globalParameters.storagelink",
+								"type": "Expression"
+							}
+						}
+					}
+				]
+			},
+			{
+				"name": "DeleteFiles",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "DeleteFiles",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"SourceStore_Location": "bronze",
+						"SourceStore_Directory": "productcategory"
+					}
+				}
+			}
+		],
+		"annotations": []
+	}
+}

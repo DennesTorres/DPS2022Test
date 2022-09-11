@@ -1,0 +1,42 @@
+{
+	"name": "BinaryDataSource_Folder",
+	"properties": {
+		"description": "It describes the folder in the data source store.",
+		"linkedServiceName": {
+			"referenceName": "linkedStorage",
+			"type": "LinkedServiceReference",
+			"parameters": {
+				"storagelink": {
+					"value": "@dataset().storagelink",
+					"type": "Expression"
+				}
+			}
+		},
+		"parameters": {
+			"Container": {
+				"type": "String"
+			},
+			"Directory": {
+				"type": "String"
+			},
+			"storagelink": {
+				"type": "string"
+			}
+		},
+		"annotations": [],
+		"type": "Binary",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"folderPath": {
+					"value": "@{dataset().Directory}",
+					"type": "Expression"
+				},
+				"fileSystem": {
+					"value": "@{dataset().Container}",
+					"type": "Expression"
+				}
+			}
+		}
+	}
+}

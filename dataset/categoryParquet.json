@@ -1,0 +1,31 @@
+{
+	"name": "categoryParquet",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "linkedStorage",
+			"type": "LinkedServiceReference",
+			"parameters": {
+				"storagelink": {
+					"value": "@dataset().storagelink",
+					"type": "Expression"
+				}
+			}
+		},
+		"parameters": {
+			"storagelink": {
+				"type": "string"
+			}
+		},
+		"annotations": [],
+		"type": "Parquet",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"folderPath": "productcategory",
+				"fileSystem": "bronze"
+			},
+			"compressionCodec": "snappy"
+		},
+		"schema": []
+	}
+}

@@ -1,0 +1,73 @@
+{
+	"name": "CategoryDS",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LinkedSQL",
+			"type": "LinkedServiceReference",
+			"parameters": {
+				"servername": {
+					"value": "@dataset().servername",
+					"type": "Expression"
+				},
+				"databasename": {
+					"value": "@dataset().databasename",
+					"type": "Expression"
+				},
+				"username": {
+					"value": "@dataset().username",
+					"type": "Expression"
+				},
+				"secretname": {
+					"value": "@dataset().secretname",
+					"type": "Expression"
+				}
+			}
+		},
+		"parameters": {
+			"servername": {
+				"type": "string"
+			},
+			"databasename": {
+				"type": "string"
+			},
+			"username": {
+				"type": "string"
+			},
+			"secretname": {
+				"type": "string"
+			}
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "ProductCategoryID",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "ParentProductCategoryID",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "Name",
+				"type": "nvarchar"
+			},
+			{
+				"name": "rowguid",
+				"type": "uniqueidentifier"
+			},
+			{
+				"name": "ModifiedDate",
+				"type": "datetime",
+				"precision": 23,
+				"scale": 3
+			}
+		],
+		"typeProperties": {
+			"schema": "SalesLT",
+			"table": "ProductCategory"
+		}
+	}
+}
