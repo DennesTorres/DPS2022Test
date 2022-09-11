@@ -28,6 +28,10 @@
 							"Directory": {
 								"value": "@pipeline().parameters.SourceStore_Directory",
 								"type": "Expression"
+							},
+							"storagelink": {
+								"value": "@pipeline().globalParameters.storagelink",
+								"type": "Expression"
 							}
 						}
 					},

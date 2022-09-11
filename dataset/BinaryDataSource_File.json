@@ -15,6 +15,9 @@
 			},
 			"filename": {
 				"type": "string"
+			},
+			"storagelink": {
+				"type": "string"
 			}
 		},
 		"annotations": [],
