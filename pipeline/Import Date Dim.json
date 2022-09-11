@@ -1,5 +1,5 @@
 {
-	"name": "pipeline1",
+	"name": "Import Date Dim",
 	"properties": {
 		"activities": [
 			{
