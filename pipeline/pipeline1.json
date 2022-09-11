@@ -81,7 +81,25 @@
 				"inputs": [
 					{
 						"referenceName": "CategoryDS",
-						"type": "DatasetReference"
+						"type": "DatasetReference",
+						"parameters": {
+							"servername": {
+								"value": "@pipeline().globalParameters.sqlservername",
+								"type": "Expression"
+							},
+							"databasename": {
+								"value": "@pipeline().globalParameters.databasename",
+								"type": "Expression"
+							},
+							"username": {
+								"value": "@pipeline().globalParameters.sqlusername",
+								"type": "Expression"
+							},
+							"secretname": {
+								"value": "@pipeline().globalParameters.passwordkey",
+								"type": "Expression"
+							}
+						}
 					}
 				],
 				"outputs": [
