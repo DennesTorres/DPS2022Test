@@ -5,6 +5,10 @@
 			"sqlservername": {
 				"type": "string",
 				"value": "mmdpug.database.windows.net"
+			},
+			"databasename": {
+				"type": "string",
+				"value": "advwrksLTdev"
 			}
 		}
 	},
