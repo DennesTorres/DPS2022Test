@@ -16,7 +16,7 @@
 			},
 			"passwordkey": {
 				"type": "string",
-				"value": "devpassword"
+				"value": "uatpassword"
 			},
 			"storagelink": {
 				"type": "string",
