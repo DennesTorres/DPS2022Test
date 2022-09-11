@@ -9,6 +9,10 @@
 			"databasename": {
 				"type": "string",
 				"value": "advwrksLTdev"
+			},
+			"sqlusername": {
+				"type": "string",
+				"value": "dennes"
 			}
 		}
 	},
