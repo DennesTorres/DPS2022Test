@@ -42,7 +42,7 @@
 							"parameters": [
 								{
 									"name": "LastVersion",
-									"type": "String",
+									"type": "Int64",
 									"value": null,
 									"direction": "Output"
 								}
@@ -103,6 +103,39 @@
 						}
 					]
 				}
+			},
+			{
+				"name": "Set Latest Version",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "Get Latest Version",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "LastVersion",
+					"value": {
+						"value": "@string(activity('Get Latest Version').output.outputparameters.LastVersion)",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "Set Current Version",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "Get Current Version",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": []
 			}
 		],
 		"variables": {
