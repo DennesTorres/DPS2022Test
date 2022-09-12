@@ -17,6 +17,10 @@
 			"passwordkey": {
 				"type": "string",
 				"value": "devpassword"
+			},
+			"databasename": {
+				"type": "string",
+				"value": "advwrksLTdev"
 			}
 		}
 	},
