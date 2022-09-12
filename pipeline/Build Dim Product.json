@@ -275,7 +275,7 @@
 							"type": "Expression"
 						},
 						"secretname": {
-							"value": "@pipeline().globalParameters.sqlusername",
+							"value": "@pipeline().globalParameters.passwordkey",
 							"type": "Expression"
 						}
 					}
