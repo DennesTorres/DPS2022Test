@@ -212,6 +212,85 @@
 						}
 					]
 				}
+			},
+			{
+				"name": "Build Product Dim",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "If exists last version",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "Core Product Dim",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"SQL": {
+							"value": "@variables('SQL')",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "Update Version Control",
+				"type": "Script",
+				"dependsOn": [
+					{
+						"activity": "Build Product Dim",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"linkedServiceName": {
+					"referenceName": "LinkedSQL",
+					"type": "LinkedServiceReference",
+					"parameters": {
+						"servername": {
+							"value": "@pipeline().globalParameters.sqlservername",
+							"type": "Expression"
+						},
+						"databasename": {
+							"value": "@pipeline().globalParameters.dwdatabasename",
+							"type": "Expression"
+						},
+						"username": {
+							"value": "@pipeline().globalParameters.sqlusername",
+							"type": "Expression"
+						},
+						"secretname": {
+							"value": "@pipeline().globalParameters.sqlusername",
+							"type": "Expression"
+						}
+					}
+				},
+				"typeProperties": {
+					"scripts": [
+						{
+							"type": "Query",
+							"text": {
+								"value": "@variables('VersionControlSQL')",
+								"type": "Expression"
+							}
+						}
+					]
+				}
 			}
 		],
 		"variables": {
