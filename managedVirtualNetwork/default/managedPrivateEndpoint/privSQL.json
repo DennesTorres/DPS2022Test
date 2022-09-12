@@ -1,7 +1,0 @@
-{
-	"name": "privSQL",
-	"properties": {
-		"privateLinkResourceId": "/subscriptions/4d72480d-0adb-4df7-b5e3-866c027fe3e0/resourceGroups/DPS2022/providers/Microsoft.Sql/servers/dps2022sql",
-		"groupId": "sqlServer"
-	}
-}
