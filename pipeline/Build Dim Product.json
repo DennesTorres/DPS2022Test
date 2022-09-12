@@ -207,7 +207,7 @@
 							"userProperties": [],
 							"typeProperties": {
 								"variableName": "VersionControlSQL",
-								"value": "@concat('Insert into dbo.SCDControl (tablename,lastversion) values (''Product'', ', variables('CurrentVersion'), ')')"
+								"value": "@concat('Insert into dbo.SCDControl (tablename,lastversion) values (''Product'', ''', variables('CurrentVersion'), ''')')"
 							}
 						}
 					]
