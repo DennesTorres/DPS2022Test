@@ -1,0 +1,12 @@
+{
+	"name": "dfDPS2022test",
+	"properties": {
+		"globalParameters": {
+			"sqlservername": {
+				"type": "string",
+				"value": "dps2022sql.database.windows.net"
+			}
+		}
+	},
+	"location": "northeurope"
+}
