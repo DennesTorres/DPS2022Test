@@ -166,7 +166,29 @@
 					"expression": {
 						"value": "@equals(variables('LastVersion'),'')",
 						"type": "Expression"
-					}
+					},
+					"ifTrueActivities": [
+						{
+							"name": "Set Full SQL",
+							"type": "SetVariable",
+							"dependsOn": [],
+							"userProperties": [],
+							"typeProperties": {
+								"variableName": "SQL",
+								"value": "'select ProductId,bp.Name ProductName,ListPrice,pm.ProductModelID,pm.Name as ModelName from dbo.bigProduct bp inner join SalesLT.ProductModel pm on bp.ProductModelID=pm.ProductModelId'"
+							}
+						},
+						{
+							"name": "Set Version Control",
+							"type": "SetVariable",
+							"dependsOn": [],
+							"userProperties": [],
+							"typeProperties": {
+								"variableName": "VersionControlSQL",
+								"value": "@concat('Insert into dbo.SCDControl (tablename,lastversion) values (''Product'', ', variables('CurrentVersion'), ')')"
+							}
+						}
+					]
 				}
 			}
 		],
