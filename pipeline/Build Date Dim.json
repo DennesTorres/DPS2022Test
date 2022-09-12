@@ -1,0 +1,394 @@
+{
+	"name": "Build Date Dim",
+	"properties": {
+		"activities": [
+			{
+				"name": "Query Date Dim",
+				"type": "Script",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"linkedServiceName": {
+					"referenceName": "LinkedSQL",
+					"type": "LinkedServiceReference",
+					"parameters": {
+						"servername": {
+							"value": "@pipeline().globalParameters.sqlservername",
+							"type": "Expression"
+						},
+						"databasename": {
+							"value": "@pipeline().globalParameters.dwdatabasename",
+							"type": "Expression"
+						},
+						"username": {
+							"value": "@pipeline().globalParameters.sqlusername",
+							"type": "Expression"
+						},
+						"secretname": {
+							"value": "@pipeline().globalParameters.passwordkey",
+							"type": "Expression"
+						}
+					}
+				},
+				"typeProperties": {
+					"scripts": [
+						{
+							"parameters": [
+								{
+									"name": "StartDate",
+									"type": "Datetime",
+									"value": null,
+									"direction": "Output"
+								},
+								{
+									"name": "EndDate",
+									"type": "Datetime",
+									"value": null,
+									"direction": "Output"
+								}
+							],
+							"type": "Query",
+							"text": "select @StartDate=min([date]),@EndDate=max([date]) from dim.Date"
+						}
+					]
+				}
+			},
+			{
+				"name": "Query Fact Dim",
+				"type": "Script",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"linkedServiceName": {
+					"referenceName": "LinkedSQL",
+					"type": "LinkedServiceReference",
+					"parameters": {
+						"servername": {
+							"value": "@pipeline().globalParameters.sqlservername",
+							"type": "Expression"
+						},
+						"databasename": {
+							"value": "@pipeline().globalParameters.databasename",
+							"type": "Expression"
+						},
+						"username": {
+							"value": "@pipeline().globalParameters.sqlusername",
+							"type": "Expression"
+						},
+						"secretname": {
+							"value": "@pipeline().globalParameters.passwordkey",
+							"type": "Expression"
+						}
+					}
+				},
+				"typeProperties": {
+					"scripts": [
+						{
+							"parameters": [
+								{
+									"name": "ProdStartDate",
+									"type": "Datetime",
+									"value": null,
+									"direction": "Output"
+								},
+								{
+									"name": "ProdEndDate",
+									"type": "Datetimeoffset",
+									"value": null,
+									"direction": "Output"
+								}
+							],
+							"type": "Query",
+							"text": "select @ProdStartDate=min([TransactionDate]),@ProdEndDate=max([TransactionDate])\nfrom [dbo].[bigTransactionHistory]"
+						}
+					]
+				}
+			},
+			{
+				"name": "SetStartDate",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "Query Date Dim",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "startDate",
+					"value": {
+						"value": "@activity('Query Date Dim').output.outputParameters.StartDate",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "SetEndDate",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "Query Date Dim",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "endDate",
+					"value": {
+						"value": "@activity('Query Date Dim').output.outputParameters.EndDate",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "SetRealStartDate",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "Query Fact Dim",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "RealStartDate",
+					"value": {
+						"value": "@adddays(activity('Query Fact Dim').output.outputParameters.ProdStartDate,-1000)\n",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "SetRealEndDate",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "Query Fact Dim",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "RealEndDate",
+					"value": {
+						"value": "@adddays(activity('Query Fact Dim').output.outputParameters.ProdEndDate,1000)\n\n",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "Set Final Start date",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "SetStartDate",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "SetRealStartDate",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "FinalStartDate",
+					"value": {
+						"value": "@if(equals(variables('startDate'),''),variables('RealStartDate'),if(less(variables('RealStartDate'),variables('startDate')) ,variables('RealStartDate'),variables('startDate') ))",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "Set Final End Date",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "SetEndDate",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "SetRealEndDate",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "FinalEndDate",
+					"value": {
+						"value": "@if(equals(variables('endDate'),''),variables('RealEndDate'),if(greater(variables('RealEndDate'),variables('endDate')) ,variables('RealEndDate'),variables('endDate') ))\n",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "Is Starting",
+				"type": "IfCondition",
+				"dependsOn": [
+					{
+						"activity": "Set Final Start date",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "Set Final End Date",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"expression": {
+						"value": "@equals(variables('startDate'),'')",
+						"type": "Expression"
+					},
+					"ifFalseActivities": [
+						{
+							"name": "Complete Date Dimension",
+							"type": "ExecutePipeline",
+							"dependsOn": [],
+							"userProperties": [],
+							"typeProperties": {
+								"pipeline": {
+									"referenceName": "Import Date Dim",
+									"type": "PipelineReference"
+								},
+								"waitOnCompletion": true,
+								"parameters": {
+									"FinalStartDate": {
+										"value": "@variables('FinalStartDate')",
+										"type": "Expression"
+									},
+									"FinalEndDate": {
+										"value": "@variables('FinalEndDate')",
+										"type": "Expression"
+									},
+									"StartDate": {
+										"value": "@variables('startDate')",
+										"type": "Expression"
+									},
+									"EndDate": {
+										"value": "@variables('endDate')",
+										"type": "Expression"
+									}
+								}
+							}
+						}
+					],
+					"ifTrueActivities": [
+						{
+							"name": "Build entire date dim",
+							"type": "SqlServerStoredProcedure",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "0.12:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"storedProcedureName": "[dbo].[FillDateDim]",
+								"storedProcedureParameters": {
+									"EndDate": {
+										"value": {
+											"value": "@variables('FinalEndDate')",
+											"type": "Expression"
+										},
+										"type": "DateTime"
+									},
+									"StartDate": {
+										"value": {
+											"value": "@variables('FinalStartDate')",
+											"type": "Expression"
+										},
+										"type": "DateTime"
+									}
+								}
+							},
+							"linkedServiceName": {
+								"referenceName": "LinkedSQL",
+								"type": "LinkedServiceReference",
+								"parameters": {
+									"servername": {
+										"value": "@pipeline().globalParameters.sqlservername",
+										"type": "Expression"
+									},
+									"databasename": {
+										"value": "@pipeline().globalParameters.dwdatabasename",
+										"type": "Expression"
+									},
+									"username": {
+										"value": "@pipeline().globalParameters.sqlusername",
+										"type": "Expression"
+									},
+									"secretname": {
+										"value": "@pipeline().globalParameters.passwordkey",
+										"type": "Expression"
+									}
+								}
+							}
+						}
+					]
+				}
+			}
+		],
+		"variables": {
+			"startDate": {
+				"type": "String"
+			},
+			"endDate": {
+				"type": "String"
+			},
+			"RealStartDate": {
+				"type": "String"
+			},
+			"RealEndDate": {
+				"type": "String"
+			},
+			"FinalStartDate": {
+				"type": "String"
+			},
+			"FinalEndDate": {
+				"type": "String"
+			},
+			"ExecEndDate": {
+				"type": "String"
+			},
+			"ExecStartDate": {
+				"type": "String"
+			}
+		},
+		"annotations": []
+	}
+}
