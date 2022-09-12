@@ -12,13 +12,93 @@
 					"name": "products"
 				}
 			],
-			"sinks": [],
-			"transformations": [],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "dimProductTarget",
+						"type": "DatasetReference"
+					},
+					"name": "DisableExisting"
+				},
+				{
+					"dataset": {
+						"referenceName": "dimProductTarget",
+						"type": "DatasetReference"
+					},
+					"name": "ActiveRecords"
+				}
+			],
+			"transformations": [
+				{
+					"name": "AddInactiveEndDate"
+				},
+				{
+					"name": "DisableRecords"
+				},
+				{
+					"name": "AddNullEndDate"
+				}
+			],
 			"scriptLines": [
-				"source(allowSchemaDrift: true,",
+				"source(output(",
+				"          ProductID as integer,",
+				"          Name as string,",
+				"          ProductNumber as string,",
+				"          Color as string,",
+				"          StandardCost as decimal(19,4),",
+				"          ListPrice as decimal(19,4),",
+				"          Size as string,",
+				"          Weight as decimal(8,2),",
+				"          ProductCategoryID as integer,",
+				"          ProductModelID as integer,",
+				"          SellStartDate as timestamp,",
+				"          SellEndDate as timestamp,",
+				"          DiscontinuedDate as timestamp,",
+				"          ThumbNailPhoto as binary,",
+				"          ThumbnailPhotoFileName as string,",
+				"          rowguid as string,",
+				"          ModifiedDate as timestamp",
+				"     ),",
+				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     isolationLevel: 'READ_UNCOMMITTED',",
-				"     format: 'table') ~> products"
+				"     format: 'table') ~> products",
+				"products derive(EndDate = currentTimestamp()) ~> AddInactiveEndDate",
+				"AddInactiveEndDate alterRow(updateIf(not(isNull(EndDate)))) ~> DisableRecords",
+				"products derive(EndDate = toDate(null())) ~> AddNullEndDate",
+				"DisableRecords sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     deletable:false,",
+				"     insertable:false,",
+				"     updateable:true,",
+				"     upsertable:false,",
+				"     keys:['ProductID'],",
+				"     skipKeyWrites:true,",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError',",
+				"     mapColumn(",
+				"          ProductID,",
+				"          EndDate",
+				"     )) ~> DisableExisting",
+				"AddNullEndDate sink(allowSchemaDrift: false,",
+				"     validateSchema: false,",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError',",
+				"     mapColumn(",
+				"          ProductID,",
+				"          Name,",
+				"          ListPrice,",
+				"          ProductModelID,",
+				"          EndDate",
+				"     )) ~> ActiveRecords"
 			]
 		}
 	}

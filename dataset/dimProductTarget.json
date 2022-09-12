@@ -1,0 +1,16 @@
+{
+	"name": "dimProductTarget",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LinkedSQL",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [],
+		"typeProperties": {
+			"schema": "Dim",
+			"table": "Product"
+		}
+	}
+}
