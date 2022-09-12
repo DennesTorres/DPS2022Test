@@ -139,7 +139,32 @@
 				"typeProperties": {
 					"variableName": "CurrentVersion",
 					"value": {
-						"value": "@activity('Get Current Version').output.outputparameters.LastVersion",
+						"value": "@string(activity('Get Current Version').output.outputparameters.LastVersion)",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "If exists last version",
+				"type": "IfCondition",
+				"dependsOn": [
+					{
+						"activity": "Set Latest Version",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "Set Current Version",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"expression": {
+						"value": "@equals(variables('LastVersion'),'')",
 						"type": "Expression"
 					}
 				}
