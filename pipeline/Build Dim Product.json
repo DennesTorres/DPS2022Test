@@ -167,6 +167,28 @@
 						"value": "@equals(variables('LastVersion'),'')",
 						"type": "Expression"
 					},
+					"ifFalseActivities": [
+						{
+							"name": "Set Incremental SQL",
+							"type": "SetVariable",
+							"dependsOn": [],
+							"userProperties": [],
+							"typeProperties": {
+								"variableName": "SQL",
+								"value": "@concat('with changes as (SELECT    CT.ProductID FROM    CHANGETABLE(CHANGES [dbo].[bigProduct],', variables('LastVersion') ,') AS CT where CT.SYS_Change_Columns in (''I'',''U'')\t  and SYS_CHANGE_COLUMNS in (''Name'',''ListPrice'',''ProductModelID'') ) select ProductId,bp.Name ProductName,ListPrice,pm.ProductModelID,pm.Name as ModelName from dbo.bigProduct bp inner join SalesLT.ProductModel pm on bp.ProductModelID=pm.ProductModelId where ProductID in (select ProductId from changes)')\n"
+							}
+						},
+						{
+							"name": "Set Update version control",
+							"type": "SetVariable",
+							"dependsOn": [],
+							"userProperties": [],
+							"typeProperties": {
+								"variableName": "VersionControlSQL",
+								"value": "@concat('Update dbo.SCDControl set lastversion=',variables('CurrentVersion'), ' where tablename=''Product''')\n"
+							}
+						}
+					],
 					"ifTrueActivities": [
 						{
 							"name": "Set Full SQL",
