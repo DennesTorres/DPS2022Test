@@ -44,7 +44,7 @@
 				"     format: 'query') ~> products",
 				"products derive(EndDate = currentTimestamp()) ~> AddInactiveEndDate",
 				"AddInactiveEndDate alterRow(updateIf(not(isNull(EndDate)))) ~> DisableRecords",
-				"DisableRecords sink(allowSchemaDrift: true,",
+				"DisableRecords sink(allowSchemaDrift: false,",
 				"     validateSchema: false,",
 				"     input(",
 				"          ProductKey as integer,",
