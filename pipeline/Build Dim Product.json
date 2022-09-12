@@ -3,7 +3,7 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "Get Latest Version",
+				"name": "Get Current Version",
 				"type": "Script",
 				"dependsOn": [],
 				"policy": {
@@ -54,7 +54,7 @@
 				}
 			},
 			{
-				"name": "Get Current Version",
+				"name": "Get Latest Version",
 				"type": "Script",
 				"dependsOn": [],
 				"policy": {
@@ -105,26 +105,6 @@
 				}
 			},
 			{
-				"name": "Set Latest Version",
-				"type": "SetVariable",
-				"dependsOn": [
-					{
-						"activity": "Get Latest Version",
-						"dependencyConditions": [
-							"Succeeded"
-						]
-					}
-				],
-				"userProperties": [],
-				"typeProperties": {
-					"variableName": "LastVersion",
-					"value": {
-						"value": "@string(activity('Get Latest Version').output.outputparameters.LastVersion)",
-						"type": "Expression"
-					}
-				}
-			},
-			{
 				"name": "Set Current Version",
 				"type": "SetVariable",
 				"dependsOn": [
@@ -139,6 +119,26 @@
 				"typeProperties": {
 					"variableName": "CurrentVersion",
 					"value": {
+						"value": "@string(activity('Get Latest Version').output.outputparameters.LastVersion)",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "Set Latest Version",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "Get Latest Version",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "LastVersion",
+					"value": {
 						"value": "@string(activity('Get Current Version').output.outputparameters.LastVersion)",
 						"type": "Expression"
 					}
@@ -149,13 +149,13 @@
 				"type": "IfCondition",
 				"dependsOn": [
 					{
-						"activity": "Set Latest Version",
+						"activity": "Set Current Version",
 						"dependencyConditions": [
 							"Succeeded"
 						]
 					},
 					{
-						"activity": "Set Current Version",
+						"activity": "Set Latest Version",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -164,7 +164,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"expression": {
-						"value": "@equals(variables('LastVersion'),'')",
+						"value": "@equals(coalesce(variables('LastVersion'),''),'')",
 						"type": "Expression"
 					},
 					"ifFalseActivities": [
