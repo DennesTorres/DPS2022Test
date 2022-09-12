@@ -135,7 +135,14 @@
 						]
 					}
 				],
-				"userProperties": []
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "CurrentVersion",
+					"value": {
+						"value": "@activity('Get Current Version').output.outputparameters.LastVersion",
+						"type": "Expression"
+					}
+				}
 			}
 		],
 		"variables": {
