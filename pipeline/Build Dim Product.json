@@ -3,8 +3,8 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "Dim Product",
-				"type": "ExecuteDataFlow",
+				"name": "Get Latest Version",
+				"type": "Script",
 				"dependsOn": [],
 				"policy": {
 					"timeout": "0.12:00:00",
@@ -14,54 +14,74 @@
 					"secureInput": false
 				},
 				"userProperties": [],
-				"typeProperties": {
-					"dataflow": {
-						"referenceName": "DisableProducts",
-						"type": "DataFlowReference",
-						"datasetParameters": {
-							"products": {
-								"servername": {
-									"value": "@pipeline().globalParameters.sqlservername",
-									"type": "Expression"
-								},
-								"databasename": {
-									"value": "@pipeline().globalParameters.databasename",
-									"type": "Expression"
-								},
-								"username": {
-									"value": "@pipeline().globalParameters.sqlusername",
-									"type": "Expression"
-								},
-								"secretname": {
-									"value": "@pipeline().globalParameters.passwordkey",
-									"type": "Expression"
-								}
-							},
-							"DisableExisting": {
-								"servername": {
-									"value": "@pipeline().globalParameters.sqlservername",
-									"type": "Expression"
-								},
-								"databasename": {
-									"value": "@pipeline().globalParameters.dwdatabasename",
-									"type": "Expression"
-								},
-								"username": {
-									"value": "@pipeline().globalParameters.sqlusername",
-									"type": "Expression"
-								},
-								"secretname": {
-									"value": "@pipeline().globalParameters.passwordkey",
-									"type": "Expression"
-								}
-							}
+				"linkedServiceName": {
+					"referenceName": "LinkedSQL",
+					"type": "LinkedServiceReference",
+					"parameters": {
+						"servername": {
+							"value": "@pipeline().globalParameters.sqlservername",
+							"type": "Expression"
+						},
+						"databasename": {
+							"value": "@pipeline().globalParameters.databasename",
+							"type": "Expression"
+						},
+						"username": {
+							"value": "@pipeline().globalParameters.sqlusername",
+							"type": "Expression"
+						},
+						"secretname": {
+							"value": "@pipeline().globalParameters.passwordkey",
+							"type": "Expression"
 						}
-					},
-					"compute": {
-						"coreCount": 8,
-						"computeType": "General"
-					},
-					"traceLevel": "Fine"
+					}
+				},
+				"typeProperties": {
+					"scripts": [
+						{
+							"parameters": [
+								{
+									"name": "LastVersion",
+									"type": "String",
+									"value": null,
+									"direction": "Output"
+								}
+							],
+							"type": "Query",
+							"text": "SELECT @LastVersion = CHANGE_TRACKING_CURRENT_VERSION()"
+						}
+					]
+				}
+			},
+			{
+				"name": "Get Current Version",
+				"type": "Script",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"linkedServiceName": {
+					"referenceName": "LinkedSQL",
+					"type": "LinkedServiceReference",
+					"parameters": {
+						"servername": {
+							"value": "@pipeline().globalParameters.sqlservername",
+							"type": "Expression"
+						}
+					}
+				},
+				"typeProperties": {
+					"scripts": [
+						{
+							"type": "Query",
+							"text": ""
+						}
+					]
 				}
 			}
 		],
