@@ -119,7 +119,7 @@
 				"typeProperties": {
 					"variableName": "CurrentVersion",
 					"value": {
-						"value": "@string(activity('Get Latest Version').output.outputparameters.LastVersion)",
+						"value": "@string(activity('Get Current Version').output.outputparameters.LastVersion)",
 						"type": "Expression"
 					}
 				}
@@ -139,7 +139,7 @@
 				"typeProperties": {
 					"variableName": "LastVersion",
 					"value": {
-						"value": "@string(activity('Get Current Version').output.outputparameters.LastVersion)",
+						"value": "@string(activity('Get Latest Version').output.outputparameters.LastVersion)",
 						"type": "Expression"
 					}
 				}
