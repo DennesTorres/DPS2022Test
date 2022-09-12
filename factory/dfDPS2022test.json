@@ -9,6 +9,10 @@
 			"dwdatabasename": {
 				"type": "string",
 				"value": "advdwdev"
+			},
+			"sqlusername": {
+				"type": "string",
+				"value": "dennes"
 			}
 		}
 	},
