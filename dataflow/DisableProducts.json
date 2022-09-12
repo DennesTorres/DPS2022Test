@@ -1,5 +1,5 @@
 {
-	"name": "DimProduct",
+	"name": "DisableProducts",
 	"properties": {
 		"type": "MappingDataFlow",
 		"typeProperties": {
@@ -19,13 +19,6 @@
 						"type": "DatasetReference"
 					},
 					"name": "DisableExisting"
-				},
-				{
-					"dataset": {
-						"referenceName": "dimProductTarget",
-						"type": "DatasetReference"
-					},
-					"name": "ActiveRecords"
 				}
 			],
 			"transformations": [
@@ -34,9 +27,6 @@
 				},
 				{
 					"name": "DisableRecords"
-				},
-				{
-					"name": "AddNullEndDate"
 				}
 			],
 			"scriptLines": [
@@ -65,7 +55,6 @@
 				"     format: 'table') ~> products",
 				"products derive(EndDate = currentTimestamp()) ~> AddInactiveEndDate",
 				"AddInactiveEndDate alterRow(updateIf(not(isNull(EndDate)))) ~> DisableRecords",
-				"products derive(EndDate = toDate(null())) ~> AddNullEndDate",
 				"DisableRecords sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     input(",
@@ -90,33 +79,7 @@
 				"     mapColumn(",
 				"          ProductID,",
 				"          EndDate",
-				"     )) ~> DisableExisting",
-				"AddNullEndDate sink(allowSchemaDrift: false,",
-				"     validateSchema: false,",
-				"     input(",
-				"          ProductKey as integer,",
-				"          ProductID as integer,",
-				"          Name as string,",
-				"          ListPrice as decimal(19,4),",
-				"          ProductModelID as integer,",
-				"          ModelName as string,",
-				"          EndDate as timestamp",
-				"     ),",
-				"     deletable:false,",
-				"     insertable:true,",
-				"     updateable:false,",
-				"     upsertable:false,",
-				"     format: 'table',",
-				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true,",
-				"     errorHandlingOption: 'stopOnFirstError',",
-				"     mapColumn(",
-				"          ProductID,",
-				"          Name,",
-				"          ListPrice,",
-				"          ProductModelID,",
-				"          EndDate",
-				"     )) ~> ActiveRecords"
+				"     )) ~> DisableExisting"
 			]
 		}
 	}
