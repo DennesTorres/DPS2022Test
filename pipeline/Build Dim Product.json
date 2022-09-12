@@ -93,7 +93,7 @@
 							"parameters": [
 								{
 									"name": "LastVersion",
-									"type": "String",
+									"type": "Int64",
 									"value": null,
 									"direction": "Output"
 								}
