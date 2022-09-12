@@ -30,6 +30,9 @@
 				}
 			],
 			"scriptLines": [
+				"parameters{",
+				"     SQL as string",
+				"}",
 				"source(output(",
 				"          ProductId as integer,",
 				"          ProductName as string,",
@@ -40,7 +43,7 @@
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     isolationLevel: 'READ_UNCOMMITTED',",
-				"     query: 'select ProductId,bp.Name ProductName,ListPrice,pm.ProductModelID,pm.Name as ModelName\\nfrom dbo.bigProduct bp\\ninner join SalesLT.ProductModel pm\\non bp.ProductModelID=pm.ProductModelId\\n',",
+				"     query: ($SQL),",
 				"     format: 'query') ~> products",
 				"products derive(EndDate = currentTimestamp()) ~> AddInactiveEndDate",
 				"AddInactiveEndDate alterRow(updateIf(not(isNull(EndDate)))) ~> DisableRecords",
