@@ -16,7 +16,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"dataflow": {
-						"referenceName": "DimProduct",
+						"referenceName": "DisableProducts",
 						"type": "DataFlowReference",
 						"datasetParameters": {
 							"products": {
@@ -38,24 +38,6 @@
 								}
 							},
 							"DisableExisting": {
-								"servername": {
-									"value": "@pipeline().globalParameters.sqlservername",
-									"type": "Expression"
-								},
-								"databasename": {
-									"value": "@pipeline().globalParameters.dwdatabasename",
-									"type": "Expression"
-								},
-								"username": {
-									"value": "@pipeline().globalParameters.sqlusername",
-									"type": "Expression"
-								},
-								"secretname": {
-									"value": "@pipeline().globalParameters.passwordkey",
-									"type": "Expression"
-								}
-							},
-							"ActiveRecords": {
 								"servername": {
 									"value": "@pipeline().globalParameters.sqlservername",
 									"type": "Expression"
