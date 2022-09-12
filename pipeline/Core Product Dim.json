@@ -18,6 +18,12 @@
 					"dataflow": {
 						"referenceName": "DisableProducts",
 						"type": "DataFlowReference",
+						"parameters": {
+							"SQL": {
+								"value": "'@{pipeline().parameters.SQL}'",
+								"type": "Expression"
+							}
+						},
 						"datasetParameters": {
 							"products": {
 								"servername": {
@@ -87,6 +93,12 @@
 					"dataflow": {
 						"referenceName": "AddProducts",
 						"type": "DataFlowReference",
+						"parameters": {
+							"SQL": {
+								"value": "'@{pipeline().parameters.SQL}'",
+								"type": "Expression"
+							}
+						},
 						"datasetParameters": {
 							"products": {
 								"servername": {
@@ -134,6 +146,11 @@
 				}
 			}
 		],
+		"parameters": {
+			"SQL": {
+				"type": "string"
+			}
+		},
 		"annotations": []
 	}
 }
