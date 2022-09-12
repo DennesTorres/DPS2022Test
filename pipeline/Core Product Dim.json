@@ -1,0 +1,139 @@
+{
+	"name": "Core Product Dim",
+	"properties": {
+		"activities": [
+			{
+				"name": "Disable Products",
+				"type": "ExecuteDataFlow",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataflow": {
+						"referenceName": "DisableProducts",
+						"type": "DataFlowReference",
+						"datasetParameters": {
+							"products": {
+								"servername": {
+									"value": "@pipeline().globalParameters.sqlservername",
+									"type": "Expression"
+								},
+								"databasename": {
+									"value": "@pipeline().globalParameters.databasename",
+									"type": "Expression"
+								},
+								"username": {
+									"value": "@pipeline().globalParameters.sqlusername",
+									"type": "Expression"
+								},
+								"secretname": {
+									"value": "@pipeline().globalParameters.passwordkey",
+									"type": "Expression"
+								}
+							},
+							"DisableExisting": {
+								"servername": {
+									"value": "@pipeline().globalParameters.sqlservername",
+									"type": "Expression"
+								},
+								"databasename": {
+									"value": "@pipeline().globalParameters.dwdatabasename",
+									"type": "Expression"
+								},
+								"username": {
+									"value": "@pipeline().globalParameters.sqlusername",
+									"type": "Expression"
+								},
+								"secretname": {
+									"value": "@pipeline().globalParameters.passwordkey",
+									"type": "Expression"
+								}
+							}
+						}
+					},
+					"compute": {
+						"coreCount": 8,
+						"computeType": "General"
+					},
+					"traceLevel": "Fine"
+				}
+			},
+			{
+				"name": "Add Products",
+				"type": "ExecuteDataFlow",
+				"dependsOn": [
+					{
+						"activity": "Disable Products",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataflow": {
+						"referenceName": "AddProducts",
+						"type": "DataFlowReference",
+						"datasetParameters": {
+							"products": {
+								"servername": {
+									"value": "@pipeline().globalParameters.sqlservername",
+									"type": "Expression"
+								},
+								"databasename": {
+									"value": "@pipeline().globalParameters.databasename",
+									"type": "Expression"
+								},
+								"username": {
+									"value": "@pipeline().globalParameters.sqlusername",
+									"type": "Expression"
+								},
+								"secretname": {
+									"value": "@pipeline().globalParameters.passwordkey",
+									"type": "Expression"
+								}
+							},
+							"ActiveRecords": {
+								"servername": {
+									"value": "@pipeline().globalParameters.sqlservername",
+									"type": "Expression"
+								},
+								"databasename": {
+									"value": "@pipeline().globalParameters.dwdatabasename",
+									"type": "Expression"
+								},
+								"username": {
+									"value": "@pipeline().globalParameters.sqlusername",
+									"type": "Expression"
+								},
+								"secretname": {
+									"value": "@pipeline().globalParameters.passwordkey",
+									"type": "Expression"
+								}
+							}
+						}
+					},
+					"compute": {
+						"coreCount": 8,
+						"computeType": "General"
+					},
+					"traceLevel": "Fine"
+				}
+			}
+		],
+		"annotations": []
+	}
+}
