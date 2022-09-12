@@ -27,6 +27,9 @@
 				}
 			],
 			"scriptLines": [
+				"parameters{",
+				"     SQL as string",
+				"}",
 				"source(output(",
 				"          ProductId as integer,",
 				"          ProductName as string,",
@@ -37,7 +40,7 @@
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     isolationLevel: 'READ_UNCOMMITTED',",
-				"     query: 'select ProductId,bp.Name ProductName,ListPrice,pm.ProductModelID,pm.Name as ModelName\\nfrom dbo.bigProduct bp\\ninner join SalesLT.ProductModel pm\\non bp.ProductModelID=pm.ProductModelId',",
+				"     query: ($SQL),",
 				"     format: 'query') ~> products",
 				"products derive(EndDate = toDate(null())) ~> AddNullEndDate",
 				"AddNullEndDate sink(allowSchemaDrift: false,",
