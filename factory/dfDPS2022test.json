@@ -5,6 +5,10 @@
 			"sqlservername": {
 				"type": "string",
 				"value": "dps2022sql.database.windows.net"
+			},
+			"dwdatabasename": {
+				"type": "string",
+				"value": "advdwdev"
 			}
 		}
 	},
