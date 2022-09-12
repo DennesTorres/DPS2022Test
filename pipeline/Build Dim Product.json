@@ -72,19 +72,53 @@
 						"servername": {
 							"value": "@pipeline().globalParameters.sqlservername",
 							"type": "Expression"
+						},
+						"databasename": {
+							"value": "@pipeline().globalParameters.dwdatabasename",
+							"type": "Expression"
+						},
+						"username": {
+							"value": "@pipeline().globalParameters.sqlusername",
+							"type": "Expression"
+						},
+						"secretname": {
+							"value": "@pipeline().globalParameters.passwordkey",
+							"type": "Expression"
 						}
 					}
 				},
 				"typeProperties": {
 					"scripts": [
 						{
+							"parameters": [
+								{
+									"name": "LastVersion",
+									"type": "String",
+									"value": null,
+									"direction": "Output"
+								}
+							],
 							"type": "Query",
-							"text": ""
+							"text": "select @LastVersion=LastVersion from dbo.SCDControl\nwhere tablename='Product'"
 						}
 					]
 				}
 			}
 		],
+		"variables": {
+			"LastVersion": {
+				"type": "String"
+			},
+			"SQL": {
+				"type": "String"
+			},
+			"CurrentVersion": {
+				"type": "String"
+			},
+			"VersionControlSQL": {
+				"type": "String"
+			}
+		},
 		"annotations": []
 	}
 }
